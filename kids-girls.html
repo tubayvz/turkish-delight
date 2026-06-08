@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turkish Delight | Kids Girls</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Fotoğrafların dikey dikdörtgen (3:4) formatında görünmesi için */
+        .product-card img {
+            width: 100%;
+            height: auto !important; 
+            aspect-ratio: 3 / 4 !important; 
+            object-fit: cover; 
+            object-position: center top; 
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <a href="index.html" class="logo">Turkish Delight</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="women.html">Women</a>
+            <a href="men.html">Men</a>
+            <a href="kids.html" class="active">Kids</a>
+            <a href="beauty.html">Beauty</a>
+            <a href="help.html">Help & Support</a>
+        </nav>
+        
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
+            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            </a>
+            <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- GIRLS PRODUCTS SECTION -->
+    <section class="section-padding container">
+        <h2 class="section-title">Girls' Collection</h2>
+        <div class="product-grid">
+            <!-- Ürün 1: Sadece Pembe Polo Tişört -->
+            <div class="product-card">
+                <img src="2c0309d58c088837926ae155b95d30af.jpg" alt="Ribbed Polo Shirt">
+                <h3>Ribbed Polo Shirt</h3>
+                <p class="price">450 TL</p>
+                <button class="add-to-cart-btn" onclick="addToCart('Ribbed Polo Shirt', 450)">Add to Cart</button>
+            </div>
+            
+            <!-- Ürün 2: Sadece Pembe Pantolon -->
+            <div class="product-card">
+                <img src="673e691e48943058dda206260f16fe12.jpg" alt="Scallop Pocket Trousers">
+                <h3>Scallop Pocket Trousers</h3>
+                <p class="price">580 TL</p>
+                <button class="add-to-cart-btn" onclick="addToCart('Scallop Pocket Trousers', 580)">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- SIDE CART PANEL -->
+    <div id="side-cart" class="side-cart">
+        <div class="cart-header">
+            <h3>My Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="total-price">Total: <span id="cart-total">0.00</span> TL</div>
+            <button class="checkout-btn" onclick="alert('Proceeding to checkout...')">Checkout</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
+    </footer>
+
+    <script src="cart.js"></script>
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turkish Delight | Sign In</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Giriş Sayfasına Özel Şık Arka Plan ve Kart Tasarımı */
+        .login-page-container {
+            min-height: calc(100vh - 160px); /* Header ve Footer payı */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #fdfbfb;
+            padding: 40px 20px;
+        }
+        .login-card {
+            background: #fff;
+            padding: 45px 40px;
+            border-radius: 12px;
+            width: 100%;
+            max-width: 420px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            border: 1px solid #f1eaeae0;
+            text-align: center;
+        }
+        .login-card h2 {
+            color: #b56576;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+        .login-card p {
+            color: #777;
+            font-size: 0.95rem;
+            margin-bottom: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        .form-group label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+            color: #3d3434;
+            font-weight: 500;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            outline: none;
+            font-size: 0.95rem;
+            transition: border-color 0.3s;
+        }
+        .form-group input:focus {
+            border-color: #b56576;
+        }
+        .login-btn {
+            width: 100%;
+            padding: 14px;
+            background: #b56576;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.2s;
+            margin-top: 10px;
+        }
+        .login-btn:hover {
+            background: #e56b6f;
+        }
+        .login-btn:active {
+            transform: scale(0.98);
+        }
+        .login-footer-links {
+            margin-top: 25px;
+            font-size: 0.88rem;
+        }
+        .login-footer-links a {
+            color: #b56576;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .login-footer-links a:hover {
+            text-decoration: underline;
+            color: #e56b6f;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <a href="index.html" class="logo">Turkish Delight</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="women.html">Women</a>
+            <a href="men.html">Men</a>
+            <a href="kids.html">Kids</a>
+            <a href="beauty.html">Beauty</a>
+            <a href="contact.html">Contact</a>
+            <a href="help.html">Help</a> </nav>
+        </nav>
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
+            <a href="login.html" class="active" style="cursor: pointer; font-size: 1rem; font-weight: 600; color: #b56576; text-decoration: none;">
+                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            </a>
+            <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN LOGIN FORM SECTION -->
+    <main class="login-page-container">
+        <div class="login-card">
+            <h2>Welcome Back</h2>
+            <p>Please enter your details to sign in to your account.</p>
+            
+            <form onsubmit="event.preventDefault(); alert('Successfully signed in!'); window.location.href='index.html';">
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" placeholder="enter your email" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required>
+                </div>
+                
+                <button type="submit" class="login-btn">Sign In</button>
+            </form>
+            
+            <div class="login-footer-links">
+                <p>Don't have an account? <a href="#">Create one here</a></p>
+                <p style="margin-top: 10px;"><a href="#">Forgot your password?</a></p>
+            </div>
+        </div>
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer>
+        <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>

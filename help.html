@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turkish Delight | Help & Support</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Help Page General Layout */
+        .help-page-container {
+            max-width: 850px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+        .help-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        .help-header h2 {
+            color: #b56576;
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+        }
+        .help-header p {
+            color: #777;
+            font-size: 1rem;
+        }
+        
+        /* Accordion FAQ Design */
+        .faq-container {
+            margin-top: 30px;
+            margin-bottom: 60px;
+        }
+        .faq-item {
+            background: #fff;
+            border: 1px solid #f1eaea;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+            transition: all 0.3s ease;
+        }
+        .faq-question {
+            padding: 20px;
+            font-weight: 600;
+            color: #3d3434;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #fff;
+            user-select: none;
+        }
+        .faq-question:hover {
+            color: #b56576;
+            background: #fffbfb;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            padding: 0 20px;
+            color: #666;
+            line-height: 1.6;
+            font-size: 0.95rem;
+            background: #fff;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+        }
+        .faq-item.active .faq-answer {
+            padding-bottom: 20px;
+        }
+        .faq-icon {
+            transition: transform 0.3s ease;
+            color: #b56576;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
+        }
+
+        /* Müşteri Hizmetleri Alanı */
+        .contact-channels {
+            margin-top: 50px;
+            border-top: 1px solid #f1eaea;
+            padding-top: 40px;
+        }
+        .contact-channels-title {
+            text-align: center;
+            font-size: 1.6rem;
+            color: #3d3434;
+            margin-bottom: 35px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
+        .channels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .channel-card {
+            background: #fff;
+            border: 1px solid #f1eaea;
+            border-radius: 10px;
+            padding: 30px 15px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+        }
+        .channel-card i {
+            font-size: 2rem;
+            color: #b56576;
+            margin-bottom: 15px;
+        }
+        .channel-card h4 {
+            font-size: 1.1rem;
+            color: #3d3434;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .channel-card p {
+            font-size: 0.9rem;
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+        .chat-link {
+            display: inline-block;
+            color: #b56576;
+            font-weight: 600;
+            text-decoration: underline;
+            font-size: 0.95rem;
+            cursor: pointer;
+            word-break: break-all;
+        }
+        .chat-link:hover {
+            color: #e56b6f;
+        }
+        
+        /* Sosyal Medya Alanı */
+        .social-support {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 40px;
+            margin-top: 35px;
+            background: #fdf6f6;
+            padding: 25px;
+            border-radius: 8px;
+        }
+        .social-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            color: #3d3434;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+        }
+        .social-item:hover {
+            color: #b56576;
+        }
+        .social-item i {
+            font-size: 1.4rem;
+            color: #b56576;
+        }
+
+        /* 🚨 AI CHAT PANELİ (SAĞDAN AÇILAN PENCERE) 🚨 */
+        .ai-chat-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 350px;
+            height: 100vh;
+            background-color: #fff;
+            box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+            z-index: 3000;
+            transition: right 0.4s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
+        .ai-chat-panel.active { right: 0; }
+        .chat-header {
+            background: linear-gradient(135deg, #b56576, #eaacb8);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .chat-header h3 { font-size: 1.2rem; display: flex; align-items: center; gap: 10px; margin: 0; }
+        .close-chat { font-size: 1.5rem; cursor: pointer; transition: transform 0.3s; }
+        .close-chat:hover { transform: rotate(90deg); }
+        .chat-messages {
+            flex: 1; padding: 20px; overflow-y: auto; background-color: #f9f9f9;
+            display: flex; flex-direction: column; gap: 15px;
+        }
+        .msg-bubble { max-width: 80%; padding: 12px 16px; border-radius: 15px; font-size: 0.95rem; line-height: 1.4; }
+        .ai-msg { background-color: #fff; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        .user-msg { background-color: #fef6f6; color: #333; align-self: flex-end; border-bottom-right-radius: 2px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); border: 1px solid #eaacb8; }
+        .chat-input-area { padding: 15px; background: #fff; border-top: 1px solid #eee; display: flex; gap: 10px; }
+        .chat-input-area input { flex: 1; padding: 12px; border: 1px solid #ddd; border-radius: 20px; outline: none; }
+        .chat-input-area input:focus { border-color: #b56576; }
+        .send-btn { background-color: #b56576; color: white; border: none; width: 42px; height: 42px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background 0.3s; }
+        .send-btn:hover { background-color: #eaacb8; }
+    </style>
+</head>
+<body>
+
+    <!-- NAVIGATION HEADER -->
+    <header>
+        <a href="index.html" class="logo">Turkish Delight</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="women.html">Women</a>
+            <a href="men.html">Men</a>
+            <a href="kids.html">Kids</a>
+            <a href="beauty.html">Beauty</a>
+            <a href="help.html" class="active">Help & Support</a>
+        </nav>
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
+            <a href="login.html" style="cursor: pointer; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            </a>
+            <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer; position: relative;">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- HELP CENTER CONTENT -->
+    <main class="help-page-container">
+        
+        <!-- SECTION 1: HEADER -->
+        <div class="help-header">
+            <h2>Help Center</h2>
+            <h3 style="color: #3d3434; font-size: 1.5rem; margin-top: 15px; font-weight: 400; letter-spacing: 0.5px;">How can we help you?</h3>
+            <p style="margin-top: 10px;">Frequently Asked Questions</p>
+        </div>
+
+        <!-- SECTION 2: ACCORDION FAQS -->
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    How can I track my order?
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Once your order is shipped, a tracking link will be sent to your registered email address. You can also monitor your package from your profile dashboard under "My Orders".
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    What is your return policy?
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    According to consumer rights, you can return any unused item within 14 days of delivery. The product must be in its original packaging with all tags attached.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Can I change or cancel my order?
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    You can cancel your order within 1 hour of purchase before it prepares for shipment. Please contact our support line immediately with your order number for quick changes.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Do you offer free shipping?
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Yes! We offer free standard shipping on all domestic orders over 750 TL. For international orders, shipping fees are calculated at the checkout panel.
+                </div>
+            </div>
+
+            <div class="faq-item">
+                <div class="faq-question" onclick="toggleFaq(this)">
+                    Are the beauty and cosmetic products authentic?
+                    <i class="fas fa-chevron-down faq-icon"></i>
+                </div>
+                <div class="faq-answer">
+                    Absolutely. All beauty, skincare, and cosmetic ingredients are dermatologically tested, 100% original, and supplied directly from certified brand distributors.
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION 3: CUSTOMER SERVICE -->
+        <section class="contact-channels">
+            <h3 class="contact-channels-title">CUSTOMER SERVICE</h3>
+            
+            <div class="channels-grid">
+                <!-- Live Chat -->
+                <div class="channel-card">
+                    <i class="far fa-comment-alt"></i>
+                    <h4>Live Chat</h4>
+                    <p>Mon-Fri: 8:30 - 00:00<br>Sat: 10:00 - 22:00</p>
+                    <span class="chat-link" onclick="toggleAIChat()">START CHAT</span>
+                </div>
+
+                <!-- WhatsApp -->
+                <div class="channel-card">
+                    <i class="fab fa-whatsapp"></i>
+                    <h4>WhatsApp</h4>
+                    <p>Mon-Fri: 08:30 - 00:00<br>Sat: 10:00 - 22:00</p>
+                    <span class="chat-link" onclick="alert('Redirecting to WhatsApp Support...')">SEND MESSAGE</span>
+                </div>
+
+                <!-- Email Support -->
+                <div class="channel-card">
+                    <i class="far fa-envelope"></i>
+                    <h4>Email Support</h4>
+                    <p>24/7 Continuous<br>Help Center Desk</p>
+                    <a href="mailto:contact.tr@turkishdelight.com" class="chat-link" style="font-size: 0.88rem;">contact.tr@turkishdelight.com</a>
+                </div>
+            </div>
+
+            <!-- Sleek Social Media Grid -->
+            <div class="social-support">
+                <a href="#" class="social-item" onclick="event.preventDefault(); alert('Opening Facebook support...');">
+                    <i class="fab fa-facebook-f"></i>
+                    <div>
+                        <strong style="display:block; font-size:0.85rem; color:#888;">Facebook</strong>
+                        <span>TurkishDelightCare</span>
+                    </div>
+                </a>
+
+                <a href="#" class="social-item" onclick="event.preventDefault(); alert('Opening X support...');">
+                    <i class="fab fa-x-twitter"></i>
+                    <div>
+                        <strong style="display:block; font-size:0.85rem; color:#888;">X</strong>
+                        <span>@turkishdelightcare</span>
+                    </div>
+                </a>
+
+                <a href="#" class="social-item" onclick="event.preventDefault(); alert('Opening Instagram support...');">
+                    <i class="fab fa-instagram"></i>
+                    <div>
+                        <strong style="display:block; font-size:0.85rem; color:#888;">Instagram</strong>
+                        <span>@turkishdelightcare</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer>
+        <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
+    </footer>
+
+    <!-- 🚨 AI CHAT PANEL 🚨 -->
+    <div id="ai-chat" class="ai-chat-panel">
+        <div class="chat-header">
+            <h3><i class="fas fa-robot"></i> Turkish Delight AI</h3>
+            <i class="fas fa-times close-chat" onclick="toggleAIChat()"></i>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            <div class="msg-bubble ai-msg">
+                Hello! I am the Turkish Delight Smart Assistant. Do you have any questions about your order, shipping, returns, or discounts?
+            </div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type a message..." onkeypress="handleKeyPress(event)">
+            <button class="send-btn" onclick="sendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <!-- SIDE CART PANEL -->
+    <div id="side-cart" class="side-cart">
+        <div class="cart-header">
+            <h3>My Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="total-price">Total: <span id="cart-total">0.00</span> TL</div>
+            <button class="checkout-btn" onclick="alert('Proceeding to checkout...')">Checkout</button>
+        </div>
+    </div>
+
+    <!-- SCRIPTS -->
+    <script>
+        // FAQ Animation
+        function toggleFaq(element) {
+            const item = element.parentElement;
+            const answer = item.querySelector('.faq-answer');
+            const allItems = document.querySelectorAll('.faq-item');
+            
+            allItems.forEach(i => {
+                if (i !== item && i.classList.contains('active')) {
+                    i.classList.remove('active');
+                    i.querySelector('.faq-answer').style.maxHeight = '0';
+                }
+            });
+
+            item.classList.toggle('active');
+
+            if (item.classList.contains('active')) {
+                answer.style.maxHeight = answer.scrollHeight + "px";
+            } else {
+                answer.style.maxHeight = "0";
+            }
+        }
+
+        // Toggle Chat Panel
+        function toggleAIChat() {
+            const chatPanel = document.getElementById('ai-chat');
+            chatPanel.classList.toggle('active');
+        }
+
+        // SMART AI RESPONSES (English Only)
+        function getSmartAIResponse(userText) {
+            let text = userText.toLowerCase();
+
+            if (text.includes("hello") || text.includes("hi") || text.includes("hey")) {
+                return "Hello! Welcome to Turkish Delight. How can I assist you with your order, shipping, or products today?";
+            } else if (text.includes("shipping") || text.includes("delivery") || text.includes("when") || text.includes("track")) {
+                return "Our orders are dispatched within 1-3 business days after confirmation. Standard shipping is completely free for purchases over 1500 TL!";
+            } else if (text.includes("return") || text.includes("exchange") || text.includes("refund")) {
+                return "You can return or exchange your items within 14 days of delivery. Please ensure you have your invoice and the original tags are attached. Detached tags are not accepted.";
+            } else if (text.includes("discount") || text.includes("sale") || text.includes("price") || text.includes("offer")) {
+                return "We currently offer a 10% discount on your first purchase at checkout! Make sure to check our 'Beauty' category for special bundle offers as well.";
+            } else if (text.includes("thanks") || text.includes("thank you")) {
+                return "You're very welcome! I'm always here if you have any other questions. Enjoy your shopping! 🛍️";
+            } else {
+                return "I didn't quite catch that. Could you please rephrase using keywords like 'shipping', 'return', or 'discount'? Alternatively, you can email us at contact.tr@turkishdelight.com.";
+            }
+        }
+
+        // Send Message Function
+        function sendMessage() {
+            const inputField = document.getElementById('chat-input');
+            const messageText = inputField.value.trim();
+            const chatMessages = document.getElementById('chat-messages');
+
+            if (messageText !== "") {
+                const userMsgDiv = document.createElement('div');
+                userMsgDiv.className = 'msg-bubble user-msg';
+                userMsgDiv.innerText = messageText;
+                chatMessages.appendChild(userMsgDiv);
+
+                inputField.value = "";
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+
+                const aiResponseText = getSmartAIResponse(messageText);
+
+                setTimeout(() => {
+                    const aiMsgDiv = document.createElement('div');
+                    aiMsgDiv.className = 'msg-bubble ai-msg';
+                    aiMsgDiv.innerText = aiResponseText;
+                    chatMessages.appendChild(aiMsgDiv);
+                    
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }, 1000); 
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === "Enter") {
+                sendMessage();
+            }
+        }
+    </script>
+    <script src="cart.js"></script>
+</body>
+</html>
