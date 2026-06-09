@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Fotoğrafların dikey dikdörtgen (3:4) formatında görünmesi için */
         .product-card img {
             width: 100%;
             height: auto !important; 
@@ -20,7 +19,6 @@
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
     <header>
         <a href="index.html" class="logo">Turkish Delight</a>
         <nav>
@@ -34,8 +32,8 @@
         </nav>
         
         <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
                 <i class="fas fa-shopping-bag"></i>
@@ -44,7 +42,6 @@
         </div>
     </header>
 
-    <!-- HERO VIDEO BANNER SECTION -->
     <section class="hero">
         <video class="hero-video" autoplay muted loop playsinline style="position: absolute; top: 50%; left: 50%; min-width: 100%; min-height: 100%; width: auto; height: auto; transform: translate(-50%, -50%); object-fit: cover; z-index: 1;">
             <source src="https://assets.mixkit.co/videos/preview/mixkit-fashion-designer-working-on-a-garment-41566-large.mp4" type="video/mp4">
@@ -58,47 +55,36 @@
         </div>
     </section>
 
-    <!-- FEATURED PRODUCTS SECTION -->
     <section id="featured" class="section-padding container">
         <h2 class="section-title">Featured Products</h2>
         <div class="product-grid">
-            
-            <!-- Vitrin Ürünü 1: Kadın Trençkot -->
             <div class="product-card">
-                <img src="5928ef32007d796dd3725ca20d84423c.jpg" alt="Olive Green Trench Coat">
+                <img src="5928ef32007d796dd3725ca20d84423c.jpg" alt="Olive Green Trench Coat" loading="lazy">
                 <h3>Olive Green Trench Coat</h3>
                 <p class="price">2450 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Olive Green Trench Coat', 2450)">Add to Cart</button>
             </div>
-            
-            <!-- Vitrin Ürünü 2: Kadın Çiçekli Takım -->
             <div class="product-card">
-                <img src="c929d405cee969889eb21a95ec895221.jpg" alt="Floral Embroidered Set">
+                <img src="c929d405cee969889eb21a95ec895221.jpg" alt="Floral Embroidered Set" loading="lazy">
                 <h3>Floral Embroidered Set</h3>
                 <p class="price">1980 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Floral Embroidered Set', 1980)">Add to Cart</button>
             </div>
-
-            <!-- Vitrin Ürünü 3: Erkek Yeşil Gömlek -->
             <div class="product-card">
-                <img src="8deddffceff6cee0da4c3d50443423c7.jpg" alt="Sage Green Overshirt">
+                <img src="8deddffceff6cee0da4c3d50443423c7.jpg" alt="Sage Green Overshirt" loading="lazy">
                 <h3>Sage Green Overshirt</h3>
                 <p class="price">3400 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Sage Green Overshirt', 3400)">Add to Cart</button>
             </div>
-            
-            <!-- Vitrin Ürünü 4: Erkek Kot Ceket -->
             <div class="product-card">
-                <img src="a3345b371610fa3004c17055baee3f8d.jpg" alt="Classic Denim Jacket">
+                <img src="a3345b371610fa3004c17055baee3f8d.jpg" alt="Classic Denim Jacket" loading="lazy">
                 <h3>Classic Denim Jacket</h3>
                 <p class="price">1650 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Classic Denim Jacket', 1650)">Add to Cart</button>
             </div>
-
         </div>
     </section>
 
-    <!-- SIDE OUT CART PANEL -->
     <div id="side-cart" class="side-cart">
         <div class="cart-header">
             <h3>My Cart</h3>
@@ -116,5 +102,33 @@
     </footer>
 
     <script src="cart.js"></script>
+
+    <script src="bg-music.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="margin-right: 5px;"></i> Sign In';
+                userMenuBtn.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>

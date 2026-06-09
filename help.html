@@ -206,7 +206,6 @@
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
     <header>
         <a href="index.html" class="logo">Turkish Delight</a>
         <nav>
@@ -219,8 +218,8 @@
             <a href="help.html" class="active">Help & Support</a>
         </nav>
         <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" style="cursor: pointer; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            <a href="login.html" id="user-menu" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer; position: relative;">
                 <i class="fas fa-shopping-bag"></i>
@@ -229,17 +228,14 @@
         </div>
     </header>
 
-    <!-- HELP CENTER CONTENT -->
     <main class="help-page-container">
         
-        <!-- SECTION 1: HEADER -->
         <div class="help-header">
             <h2>Help Center</h2>
             <h3 style="color: #3d3434; font-size: 1.5rem; margin-top: 15px; font-weight: 400; letter-spacing: 0.5px;">How can we help you?</h3>
             <p style="margin-top: 10px;">Frequently Asked Questions</p>
         </div>
 
-        <!-- SECTION 2: ACCORDION FAQS -->
         <div class="faq-container">
             <div class="faq-item">
                 <div class="faq-question" onclick="toggleFaq(this)">
@@ -292,12 +288,10 @@
             </div>
         </div>
 
-        <!-- SECTION 3: CUSTOMER SERVICE -->
         <section class="contact-channels">
             <h3 class="contact-channels-title">CUSTOMER SERVICE</h3>
             
             <div class="channels-grid">
-                <!-- Live Chat -->
                 <div class="channel-card">
                     <i class="far fa-comment-alt"></i>
                     <h4>Live Chat</h4>
@@ -305,7 +299,6 @@
                     <span class="chat-link" onclick="toggleAIChat()">START CHAT</span>
                 </div>
 
-                <!-- WhatsApp -->
                 <div class="channel-card">
                     <i class="fab fa-whatsapp"></i>
                     <h4>WhatsApp</h4>
@@ -313,7 +306,6 @@
                     <span class="chat-link" onclick="alert('Redirecting to WhatsApp Support...')">SEND MESSAGE</span>
                 </div>
 
-                <!-- Email Support -->
                 <div class="channel-card">
                     <i class="far fa-envelope"></i>
                     <h4>Email Support</h4>
@@ -322,7 +314,6 @@
                 </div>
             </div>
 
-            <!-- Sleek Social Media Grid -->
             <div class="social-support">
                 <a href="#" class="social-item" onclick="event.preventDefault(); alert('Opening Facebook support...');">
                     <i class="fab fa-facebook-f"></i>
@@ -351,12 +342,10 @@
         </section>
     </main>
 
-    <!-- FOOTER SECTION -->
     <footer>
         <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
     </footer>
 
-    <!-- 🚨 AI CHAT PANEL 🚨 -->
     <div id="ai-chat" class="ai-chat-panel">
         <div class="chat-header">
             <h3><i class="fas fa-robot"></i> Turkish Delight AI</h3>
@@ -373,7 +362,6 @@
         </div>
     </div>
 
-    <!-- SIDE CART PANEL -->
     <div id="side-cart" class="side-cart">
         <div class="cart-header">
             <h3>My Cart</h3>
@@ -386,7 +374,6 @@
         </div>
     </div>
 
-    <!-- SCRIPTS -->
     <script>
         // FAQ Animation
         function toggleFaq(element) {
@@ -470,5 +457,31 @@
         }
     </script>
     <script src="cart.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="margin-right: 5px;"></i> Sign In';
+                userMenuBtn.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>

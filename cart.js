@@ -1,7 +1,38 @@
 let cart = JSON.parse(localStorage.getItem('turkishDelightCart')) || [];
 
+// Sayfa yüklendiğinde hem sepeti listele hem de butonları ayarla
 document.addEventListener("DOMContentLoaded", () => {
     updateCart();
+
+    // Sipariş tamamlama ve sepeti kalıcı sıfırlama sistemi
+    const checkoutButtons = document.querySelectorAll('.checkout-btn');
+    
+    checkoutButtons.forEach(btn => {
+        // HTML sayfalarındaki eski alert kodunu tamamen iptal et
+        btn.removeAttribute('onclick');
+        
+        btn.addEventListener('click', () => {
+            // 1. KONTROL: Sepet gerçekten boş mu?
+            if (cart.length === 0) {
+                alert("Your cart is empty! Please add some items first. 🛍️");
+                return;
+            }
+            
+            // 2. BAŞARI MESAJI
+            alert("🎉 Order successfully received! Thank you for choosing Turkish Delight.");
+            
+            // 3. SEPETİ KALICI OLARAK SIFIRLAMA (Hata buradaydı, düzeltildi)
+            cart = []; 
+            saveCart();   // 'turkishDelightCart' adıyla boş sepeti hafızaya kazır
+            updateCart(); // Arayüzü yeniler ve o şık boş sepet ikonunu ekrana basar
+            
+            // 4. SEPET PANELİNİ OTOMATİK KAPAT
+            const sideCart = document.getElementById('side-cart');
+            if(sideCart) {
+                sideCart.classList.remove('active');
+            }
+        });
+    });
 });
 
 // Sepeti sağdan kaydırarak açıp kapatan ana fonksiyon
@@ -12,6 +43,7 @@ function toggleCart() {
     }
 }
 
+// Ürün Ekleme Fonksiyonu
 function addToCart(name, price) {
     const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
@@ -29,6 +61,7 @@ function addToCart(name, price) {
     }
 }
 
+// Adet Değiştirme Fonksiyonu (+ / - Butonları İçin)
 function changeQuantity(name, change) {
     const item = cart.find(item => item.name === name);
     if (item) {
@@ -42,16 +75,19 @@ function changeQuantity(name, change) {
     updateCart();
 }
 
+// Sepetten Ürün Silme Fonksiyonu (Çöp Kutusu İçin)
 function removeFromCart(name) {
     cart = cart.filter(item => item.name !== name);
     saveCart();
     updateCart();
 }
 
+// Hafızaya Kaydetme Fonksiyonu
 function saveCart() {
     localStorage.setItem('turkishDelightCart', JSON.stringify(cart));
 }
 
+// Sepet Arayüzünü Güncelleyen Ana Fonksiyon
 function updateCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartCount = document.getElementById('cart-count');
@@ -61,6 +97,7 @@ function updateCart() {
     
     cartItemsContainer.innerHTML = '';
     
+    // Sepet boşsa görünecek o şık Trendyol tarzı alan
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
             <div style="text-align:center; margin-top:50px; color:#aaa;">
@@ -75,6 +112,7 @@ function updateCart() {
     let total = 0;
     let totalCount = 0;
 
+    // Sepetteki ürünleri listeleme döngüsü
     cart.forEach(item => {
         let itemTotal = item.price * item.quantity;
         total += itemTotal;
@@ -106,4 +144,3 @@ function updateCart() {
     if(cartCount) cartCount.innerText = totalCount;
     if(cartTotal) cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
 }
-

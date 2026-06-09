@@ -37,7 +37,6 @@
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
     <header>
         <a href="index.html" class="logo">Turkish Delight</a>
         <nav>
@@ -51,9 +50,10 @@
         </nav>
         
         <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
+            
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
                 <i class="fas fa-shopping-bag"></i>
                 <span id="cart-count">0</span>
@@ -61,65 +61,58 @@
         </div>
     </header>
 
-    <!-- BEAUTY PRODUCTS SECTION -->
     <section class="section-padding container">
         <h2 class="section-title">Beauty & Cosmetics</h2>
         <div class="product-grid">
             
-            <!-- Ürün 1: Tonik (İngilizce) -->
             <div class="product-card">
                 <div class="img-wrapper">
-                    <img src="tonik2.jpg" alt="Pure Rose Water Toner">
+                    <img src="tonik2.jpg" alt="Pure Rose Water Toner" loading="lazy">
                 </div>
                 <h3>Pure Rose Water Toner</h3>
                 <p class="price">250 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Pure Rose Water Toner', 250)">Add to Cart</button>
             </div>
             
-            <!-- Ürün 2: Krem (İngilizce) -->
             <div class="product-card">
                 <div class="img-wrapper">
-                    <img src="krem2.jpg" alt="Premium Night Care Cream">
+                    <img src="krem2.jpg" alt="Premium Night Care Cream" loading="lazy">
                 </div>
                 <h3>Premium Night Care Cream</h3>
                 <p class="price">480 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Premium Night Care Cream', 480)">Add to Cart</button>
             </div>
 
-            <!-- Ürün 3: Losyon (İngilizce) -->
             <div class="product-card">
                 <div class="img-wrapper">
-                    <img src="losyon2.jpg" alt="Lavender Body Lotion">
+                    <img src="losyon2.jpg" alt="Lavender Body Lotion" loading="lazy">
                 </div>
                 <h3>Lavender Body Lotion</h3>
                 <p class="price">350 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Lavender Body Lotion', 350)">Add to Cart</button>
             </div>
 
-            <!-- Ürün 4: Kapatıcı (İngilizce) -->
             <div class="product-card">
                 <div class="img-wrapper">
-                    <img src="kapatici2.jpg" alt="Silky Touch Concealer - 01">
+                    <img src="kapatici2.jpg" alt="Silky Touch Concealer - 01" loading="lazy">
                 </div>
                 <h3>Silky Touch Concealer - 01</h3>
                 <p class="price">290 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Silky Touch Concealer - 01', 290)">Add to Cart</button>
             </div>
 
-            <!-- Ürün 5: Parlatıcı (İngilizce) -->
             <div class="product-card">
                 <div class="img-wrapper">
-                    <img src="parlatici2.jpg" alt="3D Shimmer Lip Gloss - 405">
+                    <img src="parlatici2.jpg" alt="3D Shimmer Lip Gloss - 405" loading="lazy">
                 </div>
                 <h3>3D Shimmer Lip Gloss - 405</h3>
                 <p class="price">320 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('3D Shimmer Lip Gloss - 405', 320)">Add to Cart</button>
             </div>
 
-            <!-- Ürün 6: Sprey (İngilizce) -->
             <div class="product-card">
                 <div class="img-wrapper">
-                    <img src="sprey2.jpg" alt="Bare Vanilla Body Mist">
+                    <img src="sprey2.jpg" alt="Bare Vanilla Body Mist" loading="lazy">
                 </div>
                 <h3>Bare Vanilla Body Mist</h3>
                 <p class="price">550 TL</p>
@@ -129,7 +122,6 @@
         </div>
     </section>
 
-    <!-- SIDE CART PANEL -->
     <div id="side-cart" class="side-cart">
         <div class="cart-header">
             <h3>My Cart</h3>
@@ -147,5 +139,33 @@
     </footer>
 
     <script src="cart.js"></script>
+
+    <script src="bg-music.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="margin-right: 5px;"></i> Sign In';
+                userMenuBtn.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>

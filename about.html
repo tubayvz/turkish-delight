@@ -90,84 +90,36 @@
             line-height: 1.6;
         }
 
-        /* Sağ Taraftaki Canlı Animasyon Alanı */
-        .ai-canvas-container {
+        /* Sağ Taraftaki VİDEO Alanı - TAM 3:4 FORMATI */
+        .video-canvas-container {
             width: 100%;
-            height: 500px;
-            border-radius: 16px;
+            max-width: 420px; /* 3:4 oranında çok lüks duracak ideal genişlik */
+            aspect-ratio: 3 / 4 !important; /* Tam istediğin dikey dikdörtgen oranı */
+            margin: 0 auto; 
+            border-radius: 20px; 
             box-shadow: 0 10px 30px rgba(181, 101, 118, 0.12);
-            background: linear-gradient(135deg, #fef6f6 0%, #eaacb8 100%);
+            overflow: hidden; 
+            background-color: #fef6f6; 
             position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .ai-wave {
-            position: absolute;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(244,172,184,0.5) 0%, rgba(181,101,118,0.2) 70%, transparent 100%);
-            border-radius: 43%;
-            animation: drift 10s infinite linear;
-            top: -50%;
-            left: -50%;
-        }
-
-        .ai-wave:nth-child(2) {
-            animation: drift 15s infinite linear;
-            background: radial-gradient(circle, rgba(229,107,111,0.3) 0%, rgba(234,172,184,0.1) 60%, transparent 100%);
-            border-radius: 40%;
-        }
-
-        @keyframes drift {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
-        }
-
-        .ai-brand-overlay {
-            position: relative;
-            z-index: 5;
-            text-align: center;
-        }
-
-        .ai-brand-overlay i {
-            font-size: 3.5rem;
-            color: #b56576;
-            animation: pulse 2s infinite ease-in-out;
-            margin-bottom: 15px;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.8; }
-            50% { transform: scale(1.08); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.8; }
-        }
-
-        .ai-brand-overlay h4 {
-            font-size: 1.6rem;
-            font-weight: 600;
-            letter-spacing: 3px;
-            color: #b56576;
-            text-transform: uppercase;
-        }
-
-        .ai-brand-overlay p {
-            font-size: 0.9rem;
-            color: #555;
-            margin-top: 5px;
+        .brand-video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            display: block;
+            transform: scale(1.15); /* İstediğin odaklanmış yakın çekim etkisi */
+            transform-origin: center center;
         }
 
         @media (max-width: 992px) {
             .about-wrapper { grid-template-columns: 1fr; }
-            .ai-canvas-container { height: 350px; }
+            .video-canvas-container { max-width: 340px; margin-top: 40px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
     <header>
         <a href="index.html" class="logo">Turkish Delight</a>
         <nav>
@@ -177,13 +129,12 @@
             <a href="men.html">Men</a>
             <a href="kids.html">Kids</a>
             <a href="beauty.html">Beauty</a>
-            <a href="contact.html">Contact</a>
-            <a href="help.html">Help</a>
+            <a href="help.html">Help & Support</a>
         </nav>
         
         <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
                 <i class="fas fa-shopping-bag"></i>
@@ -192,20 +143,16 @@
         </div>
     </header>
 
-    <!-- GEOMETRİK VE MODERN HAKKIMIZDA ALANI -->
     <section class="section-padding container">
         <div class="about-wrapper">
             
-            <!-- Sol Taraf: Hikaye ve Kurumsal Kartlar -->
             <div class="about-left-content">
                 <span class="brand-subtitle">Who We Are</span>
                 <h3 class="brand-story-title">Our Creative Journey</h3>
                 <p class="main-story-p">What started as a passionate brainstorming session between classes quickly evolved into a fully realized concept. Born from a close group of university friends, Turkish Delight blends innovation with elegance.</p>
                 
-                <!-- İçerik Alanı -->
                 <div class="features-grid">
                     
-                    <!-- Kart 1: Üniversite Vizyonu -->
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
                         <div class="feature-info">
@@ -214,7 +161,6 @@
                         </div>
                     </div>
 
-                    <!-- Kart 2: Kalite Anlayışı -->
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-gem"></i></div>
                         <div class="feature-info">
@@ -223,7 +169,6 @@
                         </div>
                     </div>
 
-                    <!-- Kart 3: Hedefimiz -->
                     <div class="feature-card">
                         <div class="feature-icon"><i class="fas fa-earth-americas"></i></div>
                         <div class="feature-info">
@@ -235,31 +180,24 @@
                 </div>
             </div>
             
-            <!-- Sağ Taraf: Kodla Çalışan Canlı Tasarım Paneli (Dış Link Bağımsız) -->
             <div class="about-right-panel">
-                <div class="ai-canvas-container">
-                    <div class="ai-wave"></div>
-                    <div class="ai-wave"></div>
-                    <div class="ai-brand-overlay">
-                        <i class="fas fa-wand-magic-sparkles"></i>
-                        <h4>Turkish Delight</h4>
-                        <p>Elegance redefined by innovation</p>
-                    </div>
+                <div class="video-canvas-container">
+                    <video class="brand-video" autoplay muted loop playsinline>
+                        <source src="6459984-hd_1080_1920_30fps.mp4" type="video/mp4">
+                        Tarayıcınız video etiketini desteklemiyor.
+                    </video>
                 </div>
             </div>
 
         </div>
     </section>
 
-    <!-- TRENDYOL STYLE SIDE OUT CART PANEL -->
     <div id="side-cart" class="side-cart">
         <div class="cart-header">
             <h3>My Cart</h3>
             <span class="close-cart" onclick="toggleCart()">&times;</span>
         </div>
-        <div id="cart-items" class="cart-items">
-            <!-- Dinamik sepet elemanları buraya gelecek -->
-        </div>
+        <div id="cart-items" class="cart-items"></div>
         <div class="cart-footer">
             <div class="total-price">Total: <span id="cart-total">0.00</span> TL</div>
             <button class="checkout-btn" onclick="alert('Proceeding to checkout...')">Checkout</button>
@@ -271,5 +209,31 @@
     </footer>
 
     <script src="cart.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="margin-right: 5px;"></i> Sign In';
+                userMenuBtn.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>

@@ -4,153 +4,73 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turkish Delight | Sign In</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Giriş Sayfasına Özel Şık Arka Plan ve Kart Tasarımı */
-        .login-page-container {
-            min-height: calc(100vh - 160px); /* Header ve Footer payı */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: #fdfbfb;
-            padding: 40px 20px;
-        }
-        .login-card {
-            background: #fff;
-            padding: 45px 40px;
-            border-radius: 12px;
-            width: 100%;
-            max-width: 420px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
-            border: 1px solid #f1eaeae0;
-            text-align: center;
-        }
-        .login-card h2 {
-            color: #b56576;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            font-weight: 600;
-        }
-        .login-card p {
-            color: #777;
-            font-size: 0.95rem;
-            margin-bottom: 30px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        .form-group label {
-            display: block;
-            font-size: 0.9rem;
-            margin-bottom: 8px;
-            color: #3d3434;
-            font-weight: 500;
-        }
-        .form-group input {
-            width: 100%;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            outline: none;
-            font-size: 0.95rem;
-            transition: border-color 0.3s;
-        }
-        .form-group input:focus {
-            border-color: #b56576;
-        }
-        .login-btn {
-            width: 100%;
-            padding: 14px;
-            background: #b56576;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s, transform 0.2s;
-            margin-top: 10px;
-        }
-        .login-btn:hover {
-            background: #e56b6f;
-        }
-        .login-btn:active {
-            transform: scale(0.98);
-        }
-        .login-footer-links {
-            margin-top: 25px;
-            font-size: 0.88rem;
-        }
-        .login-footer-links a {
-            color: #b56576;
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-        .login-footer-links a:hover {
-            text-decoration: underline;
-            color: #e56b6f;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        .split-login { display: flex; height: 100vh; width: 100%; }
+        .login-form-side { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 40px; background: #fff; }
+        .login-visual { flex: 1; background-image: url('24d5d7537b8007f1a1e8aa6d1eb0db5a.jpg'); background-size: cover; background-position: center; }
+        .login-card { width: 100%; max-width: 400px; text-align: left; }
+        .brand-title { font-size: 2rem; color: #b56576; margin-bottom: 30px; font-weight: 600; text-align: center; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; margin-bottom: 8px; font-size: 0.9rem; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 6px; }
+        .login-btn { width: 100%; padding: 14px; background: #b56576; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; margin-top: 10px; }
     </style>
 </head>
 <body>
-
-    <!-- NAVIGATION HEADER -->
-    <header>
-        <a href="index.html" class="logo">Turkish Delight</a>
-        <nav>
-            <a href="index.html">Home</a>
-            <a href="about.html">About Us</a>
-            <a href="women.html">Women</a>
-            <a href="men.html">Men</a>
-            <a href="kids.html">Kids</a>
-            <a href="beauty.html">Beauty</a>
-            <a href="contact.html">Contact</a>
-            <a href="help.html">Help</a> </nav>
-        </nav>
-        <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" class="active" style="cursor: pointer; font-size: 1rem; font-weight: 600; color: #b56576; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
-            </a>
-            <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
-                <i class="fas fa-shopping-bag"></i>
-                <span id="cart-count">0</span>
-            </div>
-        </div>
-    </header>
-
-    <!-- MAIN LOGIN FORM SECTION -->
-    <main class="login-page-container">
+<div class="split-login">
+    <main class="login-form-side">
         <div class="login-card">
-            <h2>Welcome Back</h2>
-            <p>Please enter your details to sign in to your account.</p>
-            
-            <form onsubmit="event.preventDefault(); alert('Successfully signed in!'); window.location.href='index.html';">
+            <h1 class="brand-title"><a href="index.html" style="text-decoration: none; color: inherit;">Turkish Delight</a></h1>
+            <h2>Sign In</h2>
+            <p style="margin-bottom: 20px; color: #777;">Enter your details to access your account.</p>
+            <form id="login-form">
                 <div class="form-group">
-                    <label for="email">Email Address</label>
-                    <input type="email" id="email" placeholder="enter your email" required>
+                    <label>Email Address</label>
+                    <input type="email" id="email" required>
                 </div>
-                
                 <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="••••••••" required>
+                    <label>Password</label>
+                    <input type="password" id="password" required>
                 </div>
-                
                 <button type="submit" class="login-btn">Sign In</button>
             </form>
-            
-            <div class="login-footer-links">
-                <p>Don't have an account? <a href="#">Create one here</a></p>
-                <p style="margin-top: 10px;"><a href="#">Forgot your password?</a></p>
-            </div>
+            <p id="error-message" style="color:red; margin-top:15px; font-weight: 500;"></p>
+            <p style="margin-top:20px;">Don't have an account? <a href="register.html" style="color:#b56576; font-weight:600;">Join us quickly!</a></p>
         </div>
     </main>
-
-    <!-- FOOTER SECTION -->
-    <footer>
-        <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
-    </footer>
-
+    <div class="login-visual"></div>
+</div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+    
+    const firebaseConfig = { 
+        apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+        authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+        projectId: "turkishdelight-16c0c", 
+        storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+        appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+    };
+    
+    const auth = getAuth(initializeApp(firebaseConfig));
+    
+    document.getElementById('login-form').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        // Hata mesajını önce temizleyelim
+        document.getElementById('error-message').innerText = "";
+        
+        signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value)
+            .then(() => { 
+                alert("Login successful!"); 
+                window.location.href = 'index.html'; 
+            })
+            .catch((error) => { 
+                // BURASI DEĞİŞTİ: Artık Firebase'in asıl hatasını ekrana yazdıracak
+                document.getElementById('error-message').innerText = "Hata: " + error.message; 
+            });
+    });
+</script>
 </body>
 </html>

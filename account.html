@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turkish Delight | My Account</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { background-color: #fef6f6; padding-top: 120px; color: #3d3434; }
+        
+        /* Sadece Hesabım Paneline Özel CSS Düzenlemeleri */
+        .dashboard-container { max-width: 1100px; margin: 0 auto; display: flex; gap: 30px; padding: 0 20px; }
+        
+        /* Sol Menü (Profil) */
+        .profile-card { flex: 1; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center; height: max-content; }
+        .profile-icon { font-size: 3.5rem; color: #eaacb8; margin-bottom: 15px; }
+        .account-title { font-size: 1.6rem; color: #b56576; margin-bottom: 5px; }
+        .user-email { font-size: 1rem; color: #555; margin-bottom: 25px; word-break: break-all; background: #fef6f6; padding: 8px; border-radius: 4px; }
+        
+        .logout-btn { width: 100%; padding: 12px; background-color: #3d3434; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 0.95rem; transition: background 0.3s; }
+        .logout-btn:hover { background-color: #e56b6f; }
+
+        /* Sağ Menü (Siparişler ve İadeler) */
+        .orders-card { flex: 2.5; background: #fff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .orders-title { font-size: 1.5rem; color: #b56576; margin-bottom: 20px; border-bottom: 2px solid #fef6f6; padding-bottom: 10px; }
+        .orders-title:not(:first-child) { margin-top: 40px; }
+        
+        /* Tablo Ortak Tasarımı */
+        .orders-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .orders-table th, .orders-table td { padding: 12px 15px; border-bottom: 1px solid #eee; }
+        .orders-table th { background-color: #fef6f6; color: #b56576; font-weight: 600; }
+        
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; }
+        .status-shipping { background-color: #e3f2fd; color: #0d47a1; }
+        .status-delivered { background-color: #e8f5e9; color: #1b5e20; }
+        .status-returned { background-color: #ffebee; color: #c62828; }
+        .status-processing { background-color: #fff3e0; color: #ef6c00; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Turkish Delight</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="women.html">Women</a>
+            <a href="men.html">Men</a>
+            <a href="kids.html">Kids</a>
+            <a href="beauty.html">Beauty</a>
+            <a href="help.html">Help & Support</a>
+        </nav>
+        
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
+            <a href="login.html" id="user-menu" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            </a>
+            <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <div class="dashboard-container">
+        <aside class="profile-card">
+            <i class="fas fa-user-circle profile-icon"></i>
+            <h1 class="account-title">Hesabım</h1>
+            <div class="user-email" id="display-email">...</div>
+            <button id="logout-btn" class="logout-btn"><i class="fas fa-sign-out-alt"></i> Çıkış Yap</button>
+        </aside>
+
+        <main class="orders-card">
+            <h2 class="orders-title"><i class="fas fa-box-open" style="margin-right: 10px;"></i> Siparişlerim</h2>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>Sipariş No</th>
+                        <th>Tarih</th>
+                        <th>Ürün</th>
+                        <th>Tutar</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#TD-9482</td>
+                        <td>08.06.2026</td>
+                        <td>Sage Green Overshirt</td>
+                        <td>3400 TL</td>
+                        <td><span class="status-badge status-shipping">Kargoda</span></td>
+                    </tr>
+                    <tr>
+                        <td>#TD-8321</td>
+                        <td>24.05.2026</td>
+                        <td>Classic Denim Jacket</td>
+                        <td>1650 TL</td>
+                        <td><span class="status-badge status-delivered">Teslim Edildi</span></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h2 class="orders-title"><i class="fas fa-undo-alt" style="margin-right: 10px;"></i> İadelerim</h2>
+            <table class="orders-table">
+                <thead>
+                    <tr>
+                        <th>İade No</th>
+                        <th>Tarih</th>
+                        <th>Ürün</th>
+                        <th>Tutar</th>
+                        <th>Durum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#IA-1024</td>
+                        <td>02.06.2026</td>
+                        <td>Floral Embroidered Set</td>
+                        <td>1980 TL</td>
+                        <td><span class="status-badge status-returned">İade Alındı</span></td>
+                    </tr>
+                    <tr>
+                        <td>#IA-0985</td>
+                        <td>15.05.2026</td>
+                        <td>Olive Green Trench Coat</td>
+                        <td>2450 TL</td>
+                        <td><span class="status-badge status-processing">İncelemede</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </main>
+    </div>
+
+    <div id="side-cart" class="side-cart">
+        <div class="cart-header">
+            <h3>My Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="total-price">Total: <span id="cart-total">0.00</span> TL</div>
+            <button class="checkout-btn" onclick="alert('Proceeding to checkout...')">Checkout</button>
+        </div>
+    </div>
+
+    <script src="cart.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById('display-email').innerText = user.email;
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                window.location.href = 'login.html';
+            }
+        });
+
+        document.getElementById('logout-btn').addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = 'index.html';
+            });
+        });
+    </script>
+</body>
+</html>

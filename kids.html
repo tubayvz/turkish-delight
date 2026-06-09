@@ -11,9 +11,9 @@
         .kids-split-container {
             display: flex;
             width: 100%;
-            height: calc(100vh - 80px); /* Menü yüksekliğinden sonra kalan tam alan */
+            height: calc(100vh - 80px);
             overflow: hidden;
-            background-color: #f7f7f7; /* Resimlerin arkasında boşluk kalırsa çirkin durmasın diye lüks soft arka plan */
+            background-color: #f7f7f7;
         }
         .split-side {
             flex: 1;
@@ -24,21 +24,19 @@
             text-decoration: none;
             transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
             background-repeat: no-repeat;
-            background-position: center top; /* Resimleri yukardan başlatıyoruz ki kafalar asla kesilmesin */
-            background-size: cover; /* Büyük ekranlarda tam kaplasın */
+            background-position: center top;
+            background-size: cover;
         }
         
-        /* Büyük ekranlarda çocukların yüzü kaymasın diye odak noktasını tam yukarıya/merkeze ayarlıyoruz */
         .girls-side {
             background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.3)), url('cda669ba8388abdc00e25dcfdf09edf8.jpg');
-            background-position: center 10%; /* Tam olarak kız çocuğunun yüzüne odaklanır */
+            background-position: center 10%;
         }
         .boys-side {
             background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.3)), url('470dbbeea2b4dcfec04039e4d7ead7b8.jpg');
-            background-position: center 5%; /* Tam olarak erkek çocuğunun yüzüne odaklanır */
+            background-position: center 5%;
         }
         
-        /* Üzerine gelindiğinde zarif genişleme efekti */
         .split-side:hover {
             flex: 1.1;
         }
@@ -46,7 +44,7 @@
             text-align: center;
             position: relative;
             z-index: 10;
-            margin-top: auto; /* Yazıları ve butonları biraz daha aşağıya alıyoruz ki çocukların yüzünü kapatmasınlar */
+            margin-top: auto;
             margin-bottom: 50px;
         }
         .split-content h2 {
@@ -72,21 +70,19 @@
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
             border: none;
         }
-        /* Üzerine gelindiğinde butonun markanın asil tonuna bürünmesi */
         .split-side:hover .split-btn {
             background: #b56576;
             color: #ffffff;
             box-shadow: 0 6px 20px rgba(181, 101, 118, 0.4);
         }
 
-        /* Ekran yüksekliği küçük olan bilgisayarlar için resmin sığmasını sağlayan ekstra önlem */
         @media (max-height: 800px) {
             .split-side {
-                background-size: contain; /* Kafalar kesinlikle kesilmez, resim ekrana sığar */
-                background-color: #f2e6e6; /* Kız tarafı arka planı ile uyumlu soft bir ton */
+                background-size: contain;
+                background-color: #f2e6e6;
             }
             .boys-side {
-                background-color: #e6ecf2; /* Erkek tarafı arka planı ile uyumlu soft bir ton */
+                background-color: #e6ecf2;
             }
             .split-content h2 {
                 font-size: 2.5rem;
@@ -109,9 +105,10 @@
         </nav>
         
         <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
+            
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
                 <i class="fas fa-shopping-bag"></i>
                 <span id="cart-count">0</span>
@@ -148,5 +145,33 @@
     </div>
 
     <script src="cart.js"></script>
+
+    <script src="bg-music.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="margin-right: 5px;"></i> Sign In';
+                userMenuBtn.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>

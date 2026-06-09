@@ -20,7 +20,6 @@
 </head>
 <body>
 
-    <!-- NAVIGATION HEADER -->
     <header>
         <a href="index.html" class="logo">Turkish Delight</a>
         <nav>
@@ -34,8 +33,8 @@
         </nav>
         
         <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" style="font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
-                <i class="far fa-user" style="margin-right: 5px;"></i> Sign In
+            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
                 <i class="fas fa-shopping-bag"></i>
@@ -44,21 +43,18 @@
         </div>
     </header>
 
-    <!-- GIRLS PRODUCTS SECTION -->
     <section class="section-padding container">
         <h2 class="section-title">Girls' Collection</h2>
         <div class="product-grid">
-            <!-- Ürün 1: Sadece Pembe Polo Tişört -->
             <div class="product-card">
-                <img src="2c0309d58c088837926ae155b95d30af.jpg" alt="Ribbed Polo Shirt">
+                <img src="2c0309d58c088837926ae155b95d30af.jpg" alt="Ribbed Polo Shirt" loading="lazy">
                 <h3>Ribbed Polo Shirt</h3>
                 <p class="price">450 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Ribbed Polo Shirt', 450)">Add to Cart</button>
             </div>
             
-            <!-- Ürün 2: Sadece Pembe Pantolon -->
             <div class="product-card">
-                <img src="673e691e48943058dda206260f16fe12.jpg" alt="Scallop Pocket Trousers">
+                <img src="673e691e48943058dda206260f16fe12.jpg" alt="Scallop Pocket Trousers" loading="lazy">
                 <h3>Scallop Pocket Trousers</h3>
                 <p class="price">580 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Scallop Pocket Trousers', 580)">Add to Cart</button>
@@ -66,7 +62,6 @@
         </div>
     </section>
 
-    <!-- SIDE CART PANEL -->
     <div id="side-cart" class="side-cart">
         <div class="cart-header">
             <h3>My Cart</h3>
@@ -84,5 +79,33 @@
     </footer>
 
     <script src="cart.js"></script>
+
+    <script src="bg-music.js"></script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        
+        const firebaseConfig = { 
+            apiKey: "AIzaSyC3xCy1M7Kr52_RpGjM9jk4C-36qD9tCJc", 
+            authDomain: "turkishdelight-16c0c.firebaseapp.com", 
+            projectId: "turkishdelight-16c0c", 
+            storageBucket: "turkishdelight-16c0c.firebasestorage.app", 
+            appId: "1:277365000496:web:336485f88ce317436ca0f5" 
+        };
+        
+        const auth = getAuth(initializeApp(firebaseConfig));
+        const userMenuBtn = document.getElementById('user-menu');
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="font-size: 1.2rem;"></i>';
+                userMenuBtn.href = "account.html";
+            } else {
+                userMenuBtn.innerHTML = '<i class="far fa-user" style="margin-right: 5px;"></i> Sign In';
+                userMenuBtn.href = "login.html";
+            }
+        });
+    </script>
 </body>
 </html>
