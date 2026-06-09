@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turkish Delight | Search Results</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* 🚨 BİR SATIRA 4 ÜRÜN SIĞDIRAN VE FOTOĞRAFLARI KÜÇÜLTEN YENİ GRID AYARI 🚨 */
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr); /* Yan yana tam 4 sütun yapar */
+            gap: 20px; /* Ürünlerin arasındaki boşluk */
+            margin-top: 30px;
+        }
+
+        .product-card img {
+            width: 100%;
+            height: auto !important; 
+            aspect-ratio: 3 / 4 !important; 
+            object-fit: cover; 
+            object-position: center top; 
+            border-radius: 4px;
+        }
+
+        /* Sağ üstteki çıtı pıtı arama kutusunun stili */
+        .header-search-box {
+            padding: 6px 15px;
+            width: 140px;
+            border: 1px solid #eaaaab;
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: #555;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        .header-search-box:focus {
+            border-color: #b56576;
+            width: 180px;
+            box-shadow: 0 2px 8px rgba(181, 101, 118, 0.15);
+        }
+
+        /* Sonuç bulunamadı mesajı stili */
+        #no-results-message {
+            text-align: center;
+            padding: 80px 20px;
+            color: #777;
+            background-color: #fef6f6;
+            border-radius: 8px;
+            border: 1px dashed #eaaaab;
+            display: none; 
+        }
+
+        /* Ekran küçüldüğünde (Telefonlarda) 4'lü dizilim bozulmasın diye responsive ayar */
+        @media (max-width: 992px) {
+            .product-grid {
+                grid-template-columns: repeat(2, 1fr); /* Tablette yan yana 2 tane */
+            }
+        }
+        @media (max-width: 576px) {
+            .product-grid {
+                grid-template-columns: 1fr; /* Telefonda tek tek */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <a href="index.html" class="logo">Turkish Delight</a>
+        <nav>
+            <a href="index.html">Home</a>
+            <a href="about.html">About Us</a>
+            <a href="women.html">Women</a>
+            <a href="men.html">Men</a>
+            <a href="kids.html">Kids</a>
+            <a href="beauty.html">Beauty</a>
+            <a href="help.html">Help & Support</a>
+        </nav>
+        
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 15px;">
+            <form action="search.html" method="GET" class="search-form">
+                <input type="search" name="q" class="header-search-box" placeholder="Search again...">
+            </form>
+
+            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+                <i class="far fa-user" style="font-size: 1.2rem;"></i>
+            </a>
+            <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <section id="search-results" class="section-padding container">
+        <h2 class="section-title" id="search-title">Search Results</h2>
+
+        <div class="product-grid" id="search-results-container"></div>
+
+        <div id="no-results-message">
+            <i class="fas fa-search-minus" style="font-size: 3rem; color: #eaaaab; margin-bottom: 20px;"></i>
+            <p style="font-size: 1.3rem;">Sorry, we couldn't find any results for <strong id="failed-query"></strong>.</p>
+            <p style="margin-top: 10px;">Check your spelling or try searching for another product.</p>
+            <a href="index.html" class="btn" style="margin-top: 25px; display: inline-block;">Browse All Products</a>
+        </div>
+    </section>
+
+    <div id="side-cart" class="side-cart">
+        <div class="cart-header">
+            <h3>My Cart</h3>
+            <span class="close-cart" onclick="toggleCart()">&times;</span>
+        </div>
+        <div id="cart-items" class="cart-items"></div>
+        <div class="cart-footer">
+            <div class="total-price">Total: <span id="cart-total">0.00</span> TL</div>
+            <button class="checkout-btn" onclick="alert('Proceeding to checkout...')">Checkout</button>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
+    </footer>
+
+    <script type="module">
+        import allProductsData from './products-data.js'; 
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchQuery = urlParams.get('q'); 
+
+        const resultsContainer = document.getElementById('search-results-container');
+        const searchTitle = document.getElementById('search-title');
+        const noResultsMessage = document.getElementById('no-results-message');
+        const failedQueryDisplay = document.getElementById('failed-query');
+
+        if (searchQuery) {
+            const queryLowercase = searchQuery.toLowerCase();
+            
+            searchTitle.innerHTML = `Showing Results for: <strong>"${searchQuery}"</strong>`;
+
+            const filteredProducts = allProductsData.filter(product => 
+                product.name.toLowerCase().includes(queryLowercase) || 
+                product.category.toLowerCase().includes(queryLowercase)
+            );
+
+            if (filteredProducts.length > 0) {
+                resultsContainer.style.display = "grid"; // Grid yapısını koru dedik
+                noResultsMessage.style.display = "none";
+                
+                let resultsHTML = '';
+                filteredProducts.forEach(product => {
+                    resultsHTML += `
+                        <div class="product-card">
+                            <img src="${product.imgSrc}" alt="${product.name}" loading="lazy">
+                            <h3>${product.name}</h3>
+                            <p class="price">${product.price} TL</p>
+                            <button class="add-to-cart-btn" onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+                        </div>
+                    `;
+                });
+                resultsContainer.innerHTML = resultsHTML;
+
+            } else {
+                resultsContainer.style.display = "none";
+                noResultsMessage.style.display = "block";
+                failedQueryDisplay.textContent = searchQuery; 
+            }
+        } else {
+            window.location.href = "index.html";
+        }
+    </script>
+
+    <script src="cart.js"></script>
+    <script src="bg-music.js"></script>
+</body>
+</html>
