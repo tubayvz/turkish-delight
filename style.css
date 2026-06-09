@@ -189,23 +189,22 @@ nav a:hover, nav a.active {
     color: var(--white);
 }
 
-/* 🚨 TRENDYOL STYLE SIDE CART (DÜZELTİLEN KISIM) 🚨 */
+/* TRENDYOL STYLE SIDE CART */
 .side-cart {
     position: fixed;
     top: 0;
-    right: -360px; /* İlk başta ekranın sağında tamamen gizli */
+    right: -360px;
     width: 350px;
     height: 100vh;
     background-color: var(--white);
     box-shadow: -5px 0 15px rgba(0,0,0,0.1);
     z-index: 2000;
-    transition: right 0.3s ease-in-out; /* Kayma animasyonu */
+    transition: right 0.3s ease-in-out;
     display: flex;
     flex-direction: column;
     padding: 20px;
 }
 
-/* Bu sınıf JavaScript ile eklendiğinde sepet görünür olacak */
 .side-cart.active {
     right: 0 !important;
 }
@@ -335,3 +334,11 @@ footer {
     margin-top: 40px;
 }
 
+/* 🚨 SIGN IN YAZISININ KATLANMASINI ENGELLEYEN VE HİZALAYAN MÜKEMMEL DÜZELTME KODU 🚨 */
+#user-menu {
+    width: 110px !important; /* Alanı hem ikon hem de yazı rahatça sığsın diye genişlettik */
+    white-space: nowrap !important; /* Kelimelerin asla alt alta geçmesine izin vermez, tek satırda tutar */
+    display: inline-flex !important; /* İçeriği esnek bir kutu yapar */
+    justify-content: flex-end !important; /* Yazıyı veya sadece ikon kaldığında ikonu tamamen sağa (sepete doğru) yaslar */
+    align-items: center !important; /* Dikeyde kusursuzca ortalar */
+}
