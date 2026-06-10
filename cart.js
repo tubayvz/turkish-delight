@@ -6,29 +6,29 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Sipariş tamamlama ve sepeti kalıcı sıfırlama sistemi
     const checkoutButtons = document.querySelectorAll('.checkout-btn');
-    
+
     checkoutButtons.forEach(btn => {
         // HTML sayfalarındaki eski alert kodunu tamamen iptal et
         btn.removeAttribute('onclick');
-        
+
         btn.addEventListener('click', () => {
             // 1. KONTROL: Sepet gerçekten boş mu?
             if (cart.length === 0) {
                 alert("Your cart is empty! Please add some items first. 🛍️");
                 return;
             }
-            
+
             // 2. BAŞARI MESAJI
             alert("🎉 Order successfully received! Thank you for choosing Turkish Delight.");
-            
-            // 3. SEPETİ KALICI OLARAK SIFIRLAMA
+
+            // 3. SEPETİ KALICI OLARAK SIFIRLAMA (Hata buradaydı, düzeltildi)
             cart = []; 
             saveCart();   // 'turkishDelightCart' adıyla boş sepeti hafızaya kazır
             updateCart(); // Arayüzü yeniler ve o şık boş sepet ikonunu ekrana basar
-            
+
             // 4. SEPET PANELİNİ OTOMATİK KAPAT
             const sideCart = document.getElementById('side-cart');
-            if (sideCart) {
+            if(sideCart) {
                 sideCart.classList.remove('active');
             }
         });
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Sepeti sağdan kaydırarak açıp kapatan ana fonksiyon
 function toggleCart() {
     const sideCart = document.getElementById('side-cart');
-    if (sideCart) {
+    if(sideCart) {
         sideCart.classList.toggle('active');
     }
 }
@@ -49,14 +49,14 @@ function addToCart(name, price) {
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ name: name, price: price, quantity: 1 });
+        cart.push({ name, price, quantity: 1 });
     }
     saveCart();
     updateCart();
-    
+
     // Ürün eklenince sepetin otomatik açılmasını garantiliyoruz
     const sideCart = document.getElementById('side-cart');
-    if (sideCart) {
+    if(sideCart) {
         sideCart.classList.add('active');
     }
 }
@@ -92,11 +92,11 @@ function updateCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartCount = document.getElementById('cart-count');
     const cartTotal = document.getElementById('cart-total');
-    
-    if (!cartItemsContainer) { return; }
-    
+
+    if(!cartItemsContainer) return;
+
     cartItemsContainer.innerHTML = '';
-    
+
     // Sepet boşsa görünecek o şık Trendyol tarzı alan
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = `
@@ -104,8 +104,8 @@ function updateCart() {
                 <i class="fas fa-shopping-cart" style="font-size:3rem; color:#b56576; margin-bottom:15px;"></i>
                 <p>Your cart is empty.</p>
             </div>`;
-        if (cartCount) { cartCount.innerText = '0'; }
-        if (cartTotal) { cartTotal.innerText = '0.00'; }
+        if(cartCount) cartCount.innerText = '0';
+        if(cartTotal) cartTotal.innerText = '0.00';
         return;
     }
 
@@ -120,7 +120,7 @@ function updateCart() {
 
         const itemElement = document.createElement('div');
         itemElement.classList.add('trendyol-cart-item');
-        
+
         itemElement.innerHTML = `
             <div class="cart-item-details">
                 <span class="item-title">${item.name}</span>
@@ -141,63 +141,50 @@ function updateCart() {
         cartItemsContainer.appendChild(itemElement);
     });
 
-    if (cartCount) { cartCount.innerText = totalCount; }
-    if (cartTotal) { cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }); }
+    if(cartCount) cartCount.innerText = totalCount;
+    if(cartTotal) cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
 }
-
-// 🚨 FAVORİLERDE VE TÜM SİTEDE KUTULARI EŞİTLEYEN AKILLI ENJEKTÖR KODU 🚨
+// 🚨 TÜM SİTEYE GENİŞLETİLMİŞ BEDEN/YAŞ SEÇENEĞİ EKLEYEN AKILLI KOD 🚨
 function automaticSizeInjector() {
+    // Eğer kozmetik (beauty) sayfasındaysak beden ekleme, direkt çık
+    if (window.location.pathname.includes("beauty.html")) return;
+
+    // Sitedeki tüm ürün kartlarını bul
     const productCards = document.querySelectorAll(".product-card");
     
+    // Şu an bir çocuk sayfasında olup olmadığımızı kontrol et
+    const isKidsPage = window.location.pathname.includes("kids");
+
     productCards.forEach(card => {
         const cartBtn = card.querySelector(".add-to-cart-btn");
-        const titleElement = card.querySelector("h3");
         
-        if (cartBtn && titleElement && !card.querySelector(".size-selector")) {
-            
-            const title = titleElement.innerText.toLowerCase();
-            const pagePath = window.location.pathname.toLowerCase();
-
-            const isBeauty = pagePath.includes("beauty") || 
-                             title.includes("toner") || title.includes("cream") || 
-                             title.includes("lotion") || title.includes("serum") || 
-                             title.includes("glow") || title.includes("gloss") || title.includes("mist");
-
-            const isKids = pagePath.includes("kids") || 
-                           title.includes("kids") || title.includes("çocuk") || 
-                           title.includes("baby") || title.includes("bebek");
-
+        // Eğer kartın içinde sepet butonu varsa ve daha önce beden eklenmemişse
+        if (cartBtn && !card.querySelector(".size-selector")) {
             const sizeDiv = document.createElement("div");
             sizeDiv.className = "size-selector";
-            sizeDiv.style.cssText = "display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px; height: 26px;";
+            // 5 buton yan yana sığsın diye gap mesafesi 6px yapıldı
+            sizeDiv.style.cssText = "display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px;";
             
-            // 🚨 1. SEÇENEK: Eğer Kozmetik ürünü ise içini boş bırak ve görünmez yap (Hizayı tam korur!)
-            if (isBeauty) {
-                sizeDiv.innerHTML = "";
-                sizeDiv.style.visibility = "hidden";
-            } 
-            // 🚨 2. SEÇENEK: Eğer Çocuk ürünü ise o şık yaş butonlarını bas
-            else if (isKids) {
+            // Eğer çocuk sayfasıysa 5 farklı YAŞ seçeneği, büyükse XS-XL arası 5 BEDEN seçeneği
+            if (isKidsPage) {
                 sizeDiv.innerHTML = `
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">3-4 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">5-6 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">7-8 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">9-10 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">11-12 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">3-4 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">5-6 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">7-8 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">9-10 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">11-12 Y</span>
                 `;
-            } 
-            // 🚨 3. SEÇENEK: Normal Kadın ve Erkek kıyafetleri için XS-XL butonları
-            else {
+            } else {
                 sizeDiv.innerHTML = `
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XS</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">S</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">M</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">L</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XL</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">XS</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">S</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">M</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">L</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">XL</span>
                 `;
             }
             
-            // Kutuyu butonun hemen üstüne yerleştir
+            // Bedenleri "Add to Cart" butonunun hemen üstüne yerleştir
             card.insertBefore(sizeDiv, cartBtn);
         }
     });
@@ -214,15 +201,8 @@ window.selectProductSize = function(element) {
     element.style.borderColor = "#b56576";
     element.style.backgroundColor = "#b56576";
     element.style.color = "#ffffff";
-};
+}
 
-// Sayfa ilk yüklendiğinde ve dinamik gecikmelerde tetikleyiciler
-window.addEventListener("DOMContentLoaded", () => {
-    setTimeout(automaticSizeInjector, 300);
-    setTimeout(automaticSizeInjector, 600);
-});
-
-// Sitedeki tıklamalarda (Örn: favorilere geçiş yapıldığında) butonları kontrol et
-window.addEventListener("click", () => {
-    setTimeout(automaticSizeInjector, 150);
-});
+// Sayfa yüklendiğinde ve arama sonuçları gecikmeli geldiğinde otomatik tetikle
+window.addEventListener("DOMContentLoaded", automaticSizeInjector);
+setTimeout(automaticSizeInjector, 600);
