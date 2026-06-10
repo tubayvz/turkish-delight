@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* 🚨 FAVORİ KALBİ İÇİN KART AYARI GÜNCELLENDİ 🚨 */
+        .product-card {
+            position: relative;
+        }
+
         /* Fotoğrafların dikey dikdörtgen (3:4) formatında görünmesi için */
         .product-card img {
             width: 100%;
@@ -15,6 +20,48 @@
             object-fit: cover; 
             object-position: center top; 
             border-radius: 4px;
+        }
+
+        /* 🔍 SAĞ ÜSTTEKİ ÇITI PITI ARAMA KUTUSUNUN STİLİ 🔍 */
+        .header-search-box {
+            padding: 6px 15px;
+            width: 140px;
+            border: 1px solid #eaaaab;
+            border-radius: 20px;
+            outline: none;
+            font-size: 0.85rem;
+            font-family: inherit;
+            color: #555;
+            transition: all 0.3s ease;
+            background-color: #fff;
+        }
+        .header-search-box:focus {
+            border-color: #b56576;
+            width: 180px;
+            box-shadow: 0 2px 8px rgba(181, 101, 118, 0.15);
+        }
+
+        /* ❤️ FOTOĞRAF ÜZERİNDEKİ LÜKS KALP BUTONU STİLİ ❤️ */
+        .fav-heart-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: 1.3rem;
+            color: #b56576;
+            cursor: pointer;
+            z-index: 10;
+            background: rgba(255, 255, 255, 0.8);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.2s ease;
+        }
+        .fav-heart-btn:hover {
+            transform: scale(1.1);
         }
     </style>
 </head>
@@ -32,10 +79,21 @@
             <a href="help.html">Help & Support</a>
         </nav>
         
-        <div class="nav-icons" style="display: flex; align-items: center; gap: 20px;">
-            <a href="login.html" id="user-menu" style="width: 75px; text-align: right; display: inline-block; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none;">
+        <div class="nav-icons" style="display: flex; align-items: center; gap: 15px;">
+            
+            <form action="search.html" method="GET" class="search-form">
+                <input type="search" name="q" class="header-search-box" placeholder="Search products...">
+            </form>
+
+            <a href="wishlist.html" class="fav-icon" style="cursor: pointer; color: #555; position: relative; margin: 0 5px; text-decoration: none;">
+                <i class="far fa-heart" style="font-size: 1.2rem;"></i>
+                <span id="fav-count" style="position: absolute; top: -7px; right: -8px; background: #b56576; color: #fff; font-size: 0.65rem; width: 15px; height: 15px; border-radius: 50%; display: flex; align-items: center; justify-content: center;">0</span>
+            </a>
+
+            <a href="login.html" id="user-menu" style="display: flex; align-items: center; font-size: 1rem; font-weight: 500; color: #555; text-decoration: none; white-space: nowrap;">
                 <i class="far fa-user" style="font-size: 1.2rem;"></i>
             </a>
+            
             <div class="cart-icon" onclick="toggleCart()" style="cursor: pointer;">
                 <i class="fas fa-shopping-bag"></i>
                 <span id="cart-count">0</span>
@@ -46,7 +104,11 @@
     <section class="section-padding container">
         <h2 class="section-title">Girls' Collection</h2>
         <div class="product-grid">
+            
             <div class="product-card">
+                <div class="fav-heart-btn">
+                    <i class="far fa-heart" onclick="toggleFavCounter(this)"></i>
+                </div>
                 <img src="2c0309d58c088837926ae155b95d30af.jpg" alt="Ribbed Polo Shirt" loading="lazy">
                 <h3>Ribbed Polo Shirt</h3>
                 <p class="price">450 TL</p>
@@ -54,11 +116,15 @@
             </div>
             
             <div class="product-card">
+                <div class="fav-heart-btn">
+                    <i class="far fa-heart" onclick="toggleFavCounter(this)"></i>
+                </div>
                 <img src="673e691e48943058dda206260f16fe12.jpg" alt="Scallop Pocket Trousers" loading="lazy">
                 <h3>Scallop Pocket Trousers</h3>
                 <p class="price">580 TL</p>
                 <button class="add-to-cart-btn" onclick="addToCart('Scallop Pocket Trousers', 580)">Add to Cart</button>
             </div>
+
         </div>
     </section>
 
@@ -78,8 +144,8 @@
         <p>&copy; 2026 Turkish Delight. All Rights Reserved.</p>
     </footer>
 
+    <script src="fav.js"></script>
     <script src="cart.js"></script>
-
     <script src="bg-music.js"></script>
 
     <script type="module">

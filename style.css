@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght=300;400;600&display=swap');
 
 :root {
     --rose-color: #b56576;
@@ -80,13 +80,26 @@ nav a:hover, nav a.active {
     font-weight: 600;
 }
 
+/* 🚨 SAĞ ÜST İKONLARIN KAPSAYICI ALANI GLOBAL OLARAK DÜZELTİLDİ 🚨 */
 .nav-icons {
-    font-size: 1.3rem;
-    cursor: pointer;
+    display: flex !important;
+    align-items: center !important;
+    gap: 15px !important; /* İkonların arasındaki mesafeyi tüm sayfalarda eşitler */
+}
+
+.nav-icons .search-form {
+    margin: 0 !important;
+    display: flex !important;
+    align-items: center !important;
 }
 
 .cart-icon {
     position: relative;
+    font-size: 1.2rem;
+    color: #555;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
 }
 
 #cart-count {
@@ -334,11 +347,22 @@ footer {
     margin-top: 40px;
 }
 
-/* 🚨 SIGN IN YAZISININ KATLANMASINI ENGELLEYEN VE HİZALAYAN MÜKEMMEL DÜZELTME KODU 🚨 */
+/* 🚨 REVOLUTION: GİRİŞ YAPINCA KAYMAYI VE HAYALET BOŞLUĞU YOK EDEN YENİ NESİL MÜKEMMEL KOD 🚨 */
 #user-menu {
-    width: 110px !important; /* Alanı hem ikon hem de yazı rahatça sığsın diye genişlettik */
-    white-space: nowrap !important; /* Kelimelerin asla alt alta geçmesine izin vermez, tek satırda tutar */
-    display: inline-flex !important; /* İçeriği esnek bir kutu yapar */
-    justify-content: flex-end !important; /* Yazıyı veya sadece ikon kaldığında ikonu tamamen sağa (sepete doğru) yaslar */
-    align-items: center !important; /* Dikeyde kusursuzca ortalar */
+    width: auto !important;           /* Suçlu temizlendi: Sabit genişlik yerine içeriği kadar yer kaplayacak */
+    white-space: nowrap !important;   /* Kelimelerin asla alt alta geçmesine izin vermez, tek satırda tutar */
+    display: inline-flex !important;  /* İçeriği esnek bir kutu yapar */
+    align-items: center !important;   /* Dikeyde kusursuzca ortalar */
+    justify-content: center !important;
+    gap: 5px;
+    color: var(--dark-text);
+    text-decoration: none;
+}
+
+/* Üst menüdeki kalbin (Fav) ortak CSS ayarı */
+.fav-icon {
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-decoration: none !important;
 }
