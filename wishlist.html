@@ -13,18 +13,46 @@
             gap: 20px;
             margin-top: 30px;
         }
-        .product-card { position: relative; }
-        .product-card img {
-            width: 100%;
-            height: auto !important; 
-            aspect-ratio: 3 / 4 !important; 
-            object-fit: cover; 
-            border-radius: 4px;
+        
+        .product-card { 
+            position: relative; 
+            background: #fff;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+            text-align: center;
+            display: flex !important;
+            flex-direction: column !important;
+            height: 100% !important; 
         }
+        
+        /* Fotoğrafları jilet gibi hizalayan kod */
+        .product-card img {
+            width: 100% !important;
+            height: 320px !important; 
+            object-fit: cover !important; 
+            object-position: top; 
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .product-card h3 {
+            font-size: 1.1rem;
+            margin: 0 0 10px 0;
+            line-height: 1.4;
+        }
+
+        .product-card .price {
+            color: #b56576;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
         .header-search-box {
             padding: 6px 15px; width: 140px; border: 1px solid #eaaaab; border-radius: 20px; outline: none; font-size: 0.85rem; background-color: #fff; transition: all 0.3s ease;
         }
         .header-search-box:focus { border-color: #b56576; width: 180px; }
+        
         .fav-heart-btn {
             position: absolute; top: 15px; right: 15px; font-size: 1.3rem; color: #b56576; cursor: pointer; z-index: 10; background: rgba(255, 255, 255, 0.8); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center;
         }
@@ -46,7 +74,6 @@
         </nav>
         
         <div class="nav-icons" style="display: flex; align-items: center; gap: 18px;">
-            
             <form action="search.html" method="GET" class="search-form" style="margin: 0; display: flex; align-items: center;">
                 <input type="search" name="q" class="header-search-box" placeholder="Search...">
             </form>
@@ -82,7 +109,10 @@
     <div id="side-cart" class="side-cart">
         <div class="cart-header"><h3>My Cart</h3><span onclick="toggleCart()">&times;</span></div>
         <div id="cart-items" class="cart-items"></div>
-        <div class="cart-footer"><div class="total-price">Total: <span id="cart-total">0.00</span> TL</div></div>
+        <div class="cart-footer">
+            <div class="total-price">Total: <span id="cart-total">0.00</span> TL</div>
+            <button class="checkout-btn">Checkout</button>
+        </div>
     </div>
 
     <script>
@@ -96,16 +126,73 @@
                 emptyMsg.style.display = "block";
             } else {
                 let html = '';
+                
+                // Çocuk ürünlerimizin kesin listesi
+                const cocukUrunleri = [
+                    "ribbed polo shirt",
+                    "scallop pocket trousers",
+                    "embroided knitwear shirt",
+                    "relaxed jeans"
+                ];
+
                 wishlist.forEach(product => {
+                    const titleLower = product.name.trim().toLowerCase();
+                    const imgSrc = product.imgSrc ? product.imgSrc.toLowerCase() : "";
+                    let sizeHtml = '';
+
+                    // Kozmetik Kontrolü
+                    const isBeauty = imgSrc.includes("beauty") || 
+                                     titleLower.includes("toner") || titleLower.includes("cream") || 
+                                     titleLower.includes("lotion") || titleLower.includes("serum") || 
+                                     titleLower.includes("glow") || titleLower.includes("gloss") || 
+                                     titleLower.includes("mist") || titleLower.includes("oil") || titleLower.includes("lip");
+
+                    // Çocuk Kontrolü
+                    const isKids = titleLower.includes("kids") || titleLower.includes("çocuk") || titleLower.includes("baby") ||
+                                   cocukUrunleri.includes(titleLower);
+
+                    // 1. Kozmetikse Görünmez Kutu
+                    if (isBeauty) {
+                        sizeHtml = `<div class="size-selector" style="display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px; height: 26px; visibility: hidden;"></div>`;
+                    } 
+                    // 2. Çocuksa Yaş Butonları
+                    else if (isKids) {
+                        sizeHtml = `
+                            <div class="size-selector" style="display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px; height: 26px;">
+                                <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">3-4 Y</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">5-6 Y</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">7-8 Y</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">9-10 Y</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">11-12 Y</span>
+                            </div>
+                        `;
+                    } 
+                    // 3. Normal Kıyafetse Yetişkin Beden Butonları
+                    else {
+                        sizeHtml = `
+                            <div class="size-selector" style="display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px; height: 26px;">
+                                <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XS</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">S</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">M</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">L</span>
+                                <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XL</span>
+                            </div>
+                        `;
+                    }
+
                     html += `
                         <div class="product-card">
                             <div class="fav-heart-btn">
                                 <i class="fas fa-heart" onclick="toggleFavCounter(this)"></i>
                             </div>
                             <img src="${product.imgSrc}" alt="${product.name}">
-                            <h3>${product.name}</h3>
-                            <p class="price">${product.price} TL</p>
-                            <button class="add-to-cart-btn" onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+                            
+                            <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: flex-end;">
+                                <h3>${product.name}</h3>
+                                <p class="price">${product.price} TL</p>
+                                ${sizeHtml}
+                                <button class="add-to-cart-btn" onclick="addToCart('${product.name}', ${product.price})">Add to Cart</button>
+                            </div>
                         </div>
                     `;
                 });

@@ -1,36 +1,40 @@
 let cart = JSON.parse(localStorage.getItem('turkishDelightCart')) || [];
 
-// Sayfa yüklendiğinde hem sepeti listele hem de butonları ayarla
 document.addEventListener("DOMContentLoaded", () => {
     updateCart();
 
-    // Sipariş tamamlama ve sepeti kalıcı sıfırlama sistemi
+    // HTML içindeki eski alertleri temizle
     const checkoutButtons = document.querySelectorAll('.checkout-btn');
-    
     checkoutButtons.forEach(btn => {
         btn.removeAttribute('onclick');
-        
-        btn.addEventListener('click', () => {
-            if (cart.length === 0) {
-                alert("Your cart is empty! Please add some items first. 🛍️");
-                return;
-            }
-            
-            alert("🎉 Order successfully received! Thank you for choosing Turkish Delight.");
-            
-            cart = []; 
-            saveCart();   
-            updateCart(); 
-            
-            const sideCart = document.getElementById('side-cart');
-            if (sideCart) {
-                sideCart.classList.remove('active');
-            }
-        });
+        btn.onclick = null;
     });
 });
 
-// Sepeti sağdan kaydırarak açıp kapatan ana fonksiyon
+// 🚨 GLOBAL ÖDEME BUTONU TAKİPÇİSİ 🚨
+document.addEventListener('click', (event) => {
+    if (event.target && event.target.classList.contains('checkout-btn')) {
+        event.preventDefault();
+        
+        if (cart.length === 0) {
+            alert("Your cart is empty! Please add some items first. 🛍️");
+            return;
+        }
+        
+        alert("🎉 Order successfully received! Thank you for choosing Turkish Delight.");
+        
+        cart = []; 
+        saveCart();   
+        updateCart(); 
+        
+        const sideCart = document.getElementById('side-cart');
+        if (sideCart) {
+            sideCart.classList.remove('active');
+        }
+    }
+});
+
+// Sepeti açıp kapatan fonksiyon
 function toggleCart() {
     const sideCart = document.getElementById('side-cart');
     if (sideCart) {
@@ -38,7 +42,7 @@ function toggleCart() {
     }
 }
 
-// Ürün Ekleme Fonksiyonu
+// Ürün Ekleme
 function addToCart(name, price) {
     const existingItem = cart.find(item => item.name === name);
     if (existingItem) {
@@ -55,7 +59,7 @@ function addToCart(name, price) {
     }
 }
 
-// Adet Değiştirme Fonksiyonu (+ / - Butonları İçin)
+// Adet Değiştirme
 function changeQuantity(name, change) {
     const item = cart.find(item => item.name === name);
     if (item) {
@@ -69,25 +73,24 @@ function changeQuantity(name, change) {
     updateCart();
 }
 
-// Sepetten Ürün Silme Fonksiyonu (Çöp Kutusu İçin)
+// Sepetten Silme
 function removeFromCart(name) {
     cart = cart.filter(item => item.name !== name);
     saveCart();
     updateCart();
 }
 
-// Hafızaya Kaydetme Fonksiyonu
 function saveCart() {
     localStorage.setItem('turkishDelightCart', JSON.stringify(cart));
 }
 
-// Sepet Arayüzünü Güncelleyen Ana Fonksiyon
+// Sepet Arayüzünü Güncelleme
 function updateCart() {
     const cartItemsContainer = document.getElementById('cart-items');
     const cartCount = document.getElementById('cart-count');
     const cartTotal = document.getElementById('cart-total');
     
-    if (!cartItemsContainer) return;
+    if (!cartItemsContainer) { return; }
     
     cartItemsContainer.innerHTML = '';
     
@@ -97,8 +100,8 @@ function updateCart() {
                 <i class="fas fa-shopping-cart" style="font-size:3rem; color:#b56576; margin-bottom:15px;"></i>
                 <p>Your cart is empty.</p>
             </div>`;
-        if (cartCount) cartCount.innerText = '0';
-        if (cartTotal) cartTotal.innerText = '0.00';
+        if (cartCount) { cartCount.innerText = '0'; }
+        if (cartTotal) { cartTotal.innerText = '0.00'; }
         return;
     }
 
@@ -133,43 +136,66 @@ function updateCart() {
         cartItemsContainer.appendChild(itemElement);
     });
 
-    if (cartCount) cartCount.innerText = totalCount;
-    if (cartTotal) cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+    if (cartCount) { cartCount.innerText = totalCount; }
+    if (cartTotal) { cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }); }
 }
 
-// 🚨 SADECE KOZMETİĞİ YAKALAYIP GİZLEYEN, DİĞER HER ŞEYE BEDEN BASAN ENJEKTÖR 🚨
+// 🚨 TÜM SİTEYE GENİŞLETİLMİŞ BEDEN/YAŞ SEÇENEĞİ EKLEYEN AKILLI KOD 🚨
 function automaticSizeInjector() {
     const productCards = document.querySelectorAll(".product-card");
     
+    // Çocuk ürünlerimizin kesin listesi (Favoriler sayfası için)
+    const cocukUrunleri = [
+        "ribbed polo shirt",
+        "scallop pocket trousers",
+        "embroided knitwear shirt",
+        "relaxed jeans"
+    ];
+
     productCards.forEach(card => {
         const cartBtn = card.querySelector(".add-to-cart-btn");
         const titleElement = card.querySelector("h3");
         
         if (cartBtn && titleElement && !card.querySelector(".size-selector")) {
             
-            const title = titleElement.innerText.toLowerCase();
+            const titleLower = titleElement.innerText.trim().toLowerCase();
             const pagePath = window.location.pathname.toLowerCase();
             const imgElement = card.querySelector("img");
             const imgSrc = imgElement ? imgElement.getAttribute("src").toLowerCase() : "";
 
-            // 🎯 SADECE KOZMETİK TESPİTİ (Favoriler sayfasında bile bu kelimelerden veya resimden yakalar)
+            // KOZMETİK KONTROLÜ
             const isBeauty = pagePath.includes("beauty") || 
                              imgSrc.includes("beauty") || 
-                             title.includes("toner") || title.includes("cream") || 
-                             title.includes("lotion") || title.includes("serum") || 
-                             title.includes("glow") || title.includes("gloss") || 
-                             title.includes("mist") || title.includes("oil") || title.includes("lip");
+                             titleLower.includes("toner") || titleLower.includes("cream") || 
+                             titleLower.includes("lotion") || titleLower.includes("serum") || 
+                             titleLower.includes("glow") || titleLower.includes("gloss") || 
+                             titleLower.includes("mist") || titleLower.includes("oil") || titleLower.includes("lip");
+
+            // ÇOCUK KONTROLÜ
+            const isKids = pagePath.includes("kids") || 
+                           titleLower.includes("kids") || titleLower.includes("çocuk") || titleLower.includes("baby") ||
+                           cocukUrunleri.includes(titleLower);
 
             const sizeDiv = document.createElement("div");
             sizeDiv.className = "size-selector";
             sizeDiv.style.cssText = "display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px; height: 26px;";
             
-            // Eğer Kozmetik ürünü ise içini boş bırak ve görünmez yap (Hizayı tam korur!)
+            // 1. Kozmetik (Görünmez Kutu - Hizayı korur)
             if (isBeauty) {
                 sizeDiv.innerHTML = "";
                 sizeDiv.style.visibility = "hidden";
             } 
-            // Geri kalan her şeye (Kadın, Erkek, Çocuk) standart beden kutularını bas!
+            // 2. Çocuk (Yaşlar)
+            else if (isKids) {
+                sizeDiv.innerHTML = `
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">3-4 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">5-6 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">7-8 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">9-10 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">11-12 Y</span>
+                `;
+            } 
+            // 3. Kadın/Erkek Yetişkin (Standart XS-XL)
             else {
                 sizeDiv.innerHTML = `
                     <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XS</span>
@@ -180,13 +206,12 @@ function automaticSizeInjector() {
                 `;
             }
             
-            // Kutuyu butonun hemen üstüne yerleştir
             card.insertBefore(sizeDiv, cartBtn);
         }
     });
 }
 
-// Beden tıklandığında lüks pembe rengimize boyanmasını sağlayan fonksiyon
+// Beden tıklandığında lüks pembe rengimize boyayan fonksiyon
 window.selectProductSize = function(element) {
     const allSizes = element.parentElement.querySelectorAll("span");
     allSizes.forEach(size => {
@@ -199,12 +224,12 @@ window.selectProductSize = function(element) {
     element.style.color = "#ffffff";
 };
 
-// Sayfa ilk yüklendiğinde çalıştır
+// Sayfa ilk yüklendiğinde ve dinamik tıklamalarda tetikleyiciler
 window.addEventListener("DOMContentLoaded", () => {
     setTimeout(automaticSizeInjector, 300);
+    setTimeout(automaticSizeInjector, 600);
 });
 
-// Sitedeki tıklamalarda (Örn: favorilere geçiş yapıldığında) butonları kontrol et
 window.addEventListener("click", () => {
     setTimeout(automaticSizeInjector, 150);
 });
