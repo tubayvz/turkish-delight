@@ -144,53 +144,66 @@ function updateCart() {
     if(cartCount) cartCount.innerText = totalCount;
     if(cartTotal) cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
 }
-// 🚨 TÜM SİTEYE GENİŞLETİLMİŞ BEDEN/YAŞ SEÇENEĞİ EKLEYEN AKILLI KOD 🚨
-function automaticSizeInjector() {
-    // Eğer kozmetik (beauty) sayfasındaysak beden ekleme, direkt çık
-    if (window.location.pathname.includes("beauty.html")) return;
 
-    // Sitedeki tüm ürün kartlarını bul
+// 🚨 FAVORİLERDE VE TÜM SİTEDE KUTULARI EŞİTLEYEN AKILLI ENJEKTÖR KODU 🚨
+function automaticSizeInjector() {
     const productCards = document.querySelectorAll(".product-card");
     
-    // Şu an bir çocuk sayfasında olup olmadığımızı kontrol et
-    const isKidsPage = window.location.pathname.includes("kids");
-
     productCards.forEach(card => {
         const cartBtn = card.querySelector(".add-to-cart-btn");
+        const titleElement = card.querySelector("h3");
         
-        // Eğer kartın içinde sepet butonu varsa ve daha önce beden eklenmemişse
-        if (cartBtn && !card.querySelector(".size-selector")) {
+        if (cartBtn && titleElement && !card.querySelector(".size-selector")) {
+            
+            const title = titleElement.innerText.toLowerCase();
+            const pagePath = window.location.pathname.toLowerCase();
+
+            const isBeauty = pagePath.includes("beauty") || 
+                             title.includes("toner") || title.includes("cream") || 
+                             title.includes("lotion") || title.includes("serum") || 
+                             title.includes("glow") || title.includes("gloss") || title.includes("mist");
+
+            const isKids = pagePath.includes("kids") || 
+                           title.includes("kids") || title.includes("çocuk") || 
+                           title.includes("baby") || title.includes("bebek");
+
             const sizeDiv = document.createElement("div");
             sizeDiv.className = "size-selector";
-            // 5 buton yan yana sığsın diye gap mesafesi 6px yapıldı
-            sizeDiv.style.cssText = "display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px;";
+            sizeDiv.style.cssText = "display: flex; justify-content: center; gap: 6px; margin-bottom: 15px; margin-top: 5px; height: 26px;";
             
-            // Eğer çocuk sayfasıysa 5 farklı YAŞ seçeneği, büyükse XS-XL arası 5 BEDEN seçeneği
-            if (isKidsPage) {
+            // 🚨 1. SEÇENEK: Eğer Kozmetik ürünü ise içini boş bırak ve görünmez yap (Hizayı tam korur!)
+            if (isBeauty) {
+                sizeDiv.innerHTML = "";
+                sizeDiv.style.visibility = "hidden";
+            } 
+            // 🚨 2. SEÇENEK: Eğer Çocuk ürünü ise o şık yaş butonlarını bas
+            else if (isKids) {
                 sizeDiv.innerHTML = `
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">3-4 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">5-6 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">7-8 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">9-10 Y</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap;" onclick="selectProductSize(this)">11-12 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">3-4 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">5-6 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">7-8 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">9-10 Y</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 7px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; white-space: nowrap; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">11-12 Y</span>
                 `;
-            } else {
+            } 
+            // 🚨 3. SEÇENEK: Normal Kadın ve Erkek kıyafetleri için XS-XL butonları
+            else {
                 sizeDiv.innerHTML = `
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">XS</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">S</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">M</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">L</span>
-                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s;" onclick="selectProductSize(this)">XL</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XS</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">S</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">M</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">L</span>
+                    <span style="border: 1px solid #ddd; padding: 4px 8px; font-size: 0.75rem; border-radius: 4px; cursor: pointer; transition: all 0.2s; color: #3d3434; background: transparent;" onclick="selectProductSize(this)">XL</span>
                 `;
             }
             
-            // Bedenleri "Add to Cart" butonunun hemen üstüne yerleştir
+            // Kutuyu butonun hemen üstüne yerleştir
             card.insertBefore(sizeDiv, cartBtn);
         }
     });
 }
 
-// Beden tıklandığında lüks pembe rengimize boyanmasını sağlayan fonksiyon
+// Beden/Yaş seçilince pembeye boyayan ortak fonksiyon
 window.selectProductSize = function(element) {
     const allSizes = element.parentElement.querySelectorAll("span");
     allSizes.forEach(size => {
@@ -203,6 +216,13 @@ window.selectProductSize = function(element) {
     element.style.color = "#ffffff";
 }
 
-// Sayfa yüklendiğinde ve arama sonuçları gecikmeli geldiğinde otomatik tetikle
-window.addEventListener("DOMContentLoaded", automaticSizeInjector);
+// Sayfa ilk yüklendiğinde ve dinamik gecikmelerde tetikleyiciler
+window.addEventListener("DOMContentLoaded", () => {
+    setTimeout(automaticSizeInjector, 300);
+});
 setTimeout(automaticSizeInjector, 600);
+
+// Sitedeki tıklamalarda (Örn: favorilere geçiş yapıldığında) butonları kontrol et
+window.addEventListener("click", () => {
+    setTimeout(automaticSizeInjector, 150);
+});
