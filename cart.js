@@ -21,14 +21,14 @@ document.addEventListener("DOMContentLoaded", () => {
             // 2. BAŞARI MESAJI
             alert("🎉 Order successfully received! Thank you for choosing Turkish Delight.");
             
-            // 3. SEPETİ KALICI OLARAK SIFIRLAMA (Hata buradaydı, düzeltildi)
+            // 3. SEPETİ KALICI OLARAK SIFIRLAMA
             cart = []; 
             saveCart();   // 'turkishDelightCart' adıyla boş sepeti hafızaya kazır
             updateCart(); // Arayüzü yeniler ve o şık boş sepet ikonunu ekrana basar
             
             // 4. SEPET PANELİNİ OTOMATİK KAPAT
             const sideCart = document.getElementById('side-cart');
-            if(sideCart) {
+            if (sideCart) {
                 sideCart.classList.remove('active');
             }
         });
@@ -38,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 // Sepeti sağdan kaydırarak açıp kapatan ana fonksiyon
 function toggleCart() {
     const sideCart = document.getElementById('side-cart');
-    if(sideCart) {
+    if (sideCart) {
         sideCart.classList.toggle('active');
     }
 }
@@ -49,14 +49,14 @@ function addToCart(name, price) {
     if (existingItem) {
         existingItem.quantity += 1;
     } else {
-        cart.push({ name, price, quantity: 1 });
+        cart.push({ name: name, price: price, quantity: 1 });
     }
     saveCart();
     updateCart();
     
     // Ürün eklenince sepetin otomatik açılmasını garantiliyoruz
     const sideCart = document.getElementById('side-cart');
-    if(sideCart) {
+    if (sideCart) {
         sideCart.classList.add('active');
     }
 }
@@ -93,7 +93,7 @@ function updateCart() {
     const cartCount = document.getElementById('cart-count');
     const cartTotal = document.getElementById('cart-total');
     
-    if(!cartItemsContainer) return;
+    if (!cartItemsContainer) { return; }
     
     cartItemsContainer.innerHTML = '';
     
@@ -104,8 +104,8 @@ function updateCart() {
                 <i class="fas fa-shopping-cart" style="font-size:3rem; color:#b56576; margin-bottom:15px;"></i>
                 <p>Your cart is empty.</p>
             </div>`;
-        if(cartCount) cartCount.innerText = '0';
-        if(cartTotal) cartTotal.innerText = '0.00';
+        if (cartCount) { cartCount.innerText = '0'; }
+        if (cartTotal) { cartTotal.innerText = '0.00'; }
         return;
     }
 
@@ -141,8 +141,8 @@ function updateCart() {
         cartItemsContainer.appendChild(itemElement);
     });
 
-    if(cartCount) cartCount.innerText = totalCount;
-    if(cartTotal) cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 });
+    if (cartCount) { cartCount.innerText = totalCount; }
+    if (cartTotal) { cartTotal.innerText = total.toLocaleString('tr-TR', { minimumFractionDigits: 2 }); }
 }
 
 // 🚨 FAVORİLERDE VE TÜM SİTEDE KUTULARI EŞİTLEYEN AKILLI ENJEKTÖR KODU 🚨
@@ -203,7 +203,7 @@ function automaticSizeInjector() {
     });
 }
 
-// Beden/Yaş seçilince pembeye boyayan ortak fonksiyon
+// Beden tıklandığında lüks pembe rengimize boyanmasını sağlayan fonksiyon
 window.selectProductSize = function(element) {
     const allSizes = element.parentElement.querySelectorAll("span");
     allSizes.forEach(size => {
@@ -214,13 +214,13 @@ window.selectProductSize = function(element) {
     element.style.borderColor = "#b56576";
     element.style.backgroundColor = "#b56576";
     element.style.color = "#ffffff";
-}
+};
 
 // Sayfa ilk yüklendiğinde ve dinamik gecikmelerde tetikleyiciler
 window.addEventListener("DOMContentLoaded", () => {
     setTimeout(automaticSizeInjector, 300);
+    setTimeout(automaticSizeInjector, 600);
 });
-setTimeout(automaticSizeInjector, 600);
 
 // Sitedeki tıklamalarda (Örn: favorilere geçiş yapıldığında) butonları kontrol et
 window.addEventListener("click", () => {
